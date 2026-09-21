@@ -1,0 +1,19 @@
+:root {
+  color-scheme: dark;
+  --color-background: #101113;
+  --color-surface: #161719;
+  --color-surface-raised: #1c1e20;
+  --color-text: #edeeeb;
+  --color-muted: #a0a3a3;
+  --color-subtle: #929696;
+  --color-border: #2c2e30;
+  --color-border-subtle: #232527;
+  --color-accent: #b9cbb5;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --page-width: 1280px;
+  --page-gutter: clamp(22px, 5.4vw, 80px);
+  --header-height: 82px;
+  --radius: 6px;
+}

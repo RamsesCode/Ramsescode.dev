@@ -1,4 +1,5 @@
 import styles from "./hero.module.css";
+import { TypingText } from "@/components/animations/typing-text";
 
 export function ScrollIndicator() {
   return (
@@ -8,7 +9,9 @@ export function ScrollIndicator() {
           <span />
         </span>
       </span>
-      <span>SCROLL TO EXPLORE</span>
+      <span>
+        <TypingText>SCROLL TO EXPLORE</TypingText>
+      </span>
     </a>
   );
 }

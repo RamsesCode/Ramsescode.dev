@@ -1,4 +1,5 @@
 import { ArrowUpRight, Code2 } from "lucide-react";
+import { TypingText } from "@/components/animations/typing-text";
 import { Container } from "@/components/layout/container";
 import { ButtonLink } from "@/components/ui/button-link";
 
@@ -6,22 +7,29 @@ export function AboutSection() {
   return (
     <section id="about" className="section about-section" aria-labelledby="about-heading">
       <Container className="about-grid">
-        <div>
+        <div data-typing-group="scroll">
           <p className="eyebrow">
-            <span className="section-number">04</span> The person behind the code
+            <span className="section-number">04</span>{" "}
+            <TypingText>The person behind the code</TypingText>
           </p>
           <h2 id="about-heading">
-            Curious by nature.
+            <TypingText>Curious by nature.</TypingText>
             <br />
-            <span className="text-muted">Engineer by craft.</span>
+            <span className="text-muted">
+              <TypingText>Engineer by craft.</TypingText>
+            </span>
           </h2>
-          <p className="about-copy">
-            I’m Ramses, a Full Stack Software Engineer. I care about the connection
-            between how software works and how it feels to use.
+          <p className="about-copy" data-typing-group="scroll">
+            <TypingText>
+              I’m Ramses, a Full Stack Software Engineer. I care about the connection
+              between how software works and how it feels to use.
+            </TypingText>
           </p>
-          <p className="about-copy">
-            This is a space for the things I build, the details I care about, and the
-            ideas I’m still exploring.
+          <p className="about-copy" data-typing-group="scroll">
+            <TypingText>
+              This is a space for the things I build, the details I care about, and the
+              ideas I’m still exploring.
+            </TypingText>
           </p>
           <ButtonLink href="#contact" variant="text">
             Let’s build something useful <ArrowUpRight size={16} aria-hidden="true" />

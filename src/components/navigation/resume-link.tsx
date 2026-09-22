@@ -2,7 +2,7 @@ import { site } from "@/data/site";
 import styles from "./navigation.module.css";
 
 export function ResumeLink() {
-  return site.resume.available ? (
+  return (
     <a
       className={styles.resumeLink}
       href={site.resume.path}
@@ -11,14 +11,6 @@ export function ResumeLink() {
     >
       resume()
       <span className="visually-hidden"> (PDF, opens in a new tab)</span>
-    </a>
-  ) : (
-    <a
-      className={styles.resumeLink}
-      href="#resume-status"
-      aria-label="resume() — coming soon"
-    >
-      resume()
     </a>
   );
 }

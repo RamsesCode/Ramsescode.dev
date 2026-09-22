@@ -8,16 +8,20 @@ export const site = {
   url: "https://ramsescode.dev",
   email: null as string | null,
   resume: {
-    path: "/documents/ramses-sanchez-resume.pdf",
-    available: false,
+    path: "/documents/Ramses_Sanchez_Resume.pdf",
+    available: true,
   },
   /** Set a local path after the final social-preview artwork is supplied. */
   openGraphImage: null as string | null,
 };
 
 export const socialProfiles: readonly SocialProfile[] = [
-  { id: "github", label: "GitHub", url: null },
-  { id: "linkedin", label: "LinkedIn", url: null },
+  { id: "github", label: "GitHub", url: "https://github.com/RamsesCode" },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    url: "https://www.linkedin.com/in/ramses-sanchez-codes/",
+  },
 ];
 
 export const navigation = [

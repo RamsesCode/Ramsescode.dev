@@ -32,7 +32,7 @@ src/
   components/
     navigation/              # Direction-aware fixed header, mobile menu, resume action
     hero/                    # Independent hero media and HTML content layers
-    animations/              # Small client-only animation scenes
+    animations/              # Server-rendered typing text and scoped client controllers
     sections/                # Server-rendered homepage composition
     projects/                # Featured projects, cards, concept media
     experience/              # Data-driven experience timeline
@@ -46,7 +46,7 @@ src/
       button-link.tsx        # Shared link/button styling
     layout/                  # Shared content container
   hooks/                     # Typed, scoped useScrollScene hook
-  lib/animation/             # GSAP registration and scroll timeline factory
+  lib/animation/             # GSAP registration, scroll timelines, glyph-mask helper
   data/                      # Site settings, projects, experience, technologies
   types/                     # Shared portfolio data contracts
   styles/                    # Design tokens, layout, responsive and motion rules
@@ -62,7 +62,7 @@ public/
   media/                     # Other future media assets
 ```
 
-The page, layout, hero, and content sections are Server Components. Only the navigation and background video controller use client boundaries on the current homepage. The reusable GSAP scene remains in the source, unmounted until storytelling work resumes. There is no database, authentication, application API, contact backend, or Three.js. Data is local and the homepage is prerendered.
+The page, layout, hero, and content sections are Server Components. The navigation, background video controller, and scoped typing controller use small client boundaries. `TypingText` itself is server rendered. The earlier code-to-copy GSAP scene remains in the source, unmounted until storytelling work resumes. There is no database, authentication, application API, contact backend, or Three.js. Data is local and the homepage is prerendered.
 
 The runtime dependencies are Next.js, React / React DOM, GSAP, the official `@gsap/react` integration, and tree-shaken Lucide icons. Development dependencies provide TypeScript, React / Node types, ESLint with Next.js rules, and Prettier. The lockfile records exact installed versions. System fonts avoid network font requests; replace the font tokens or use `next/font/local` when typography is selected.
 
@@ -86,15 +86,15 @@ Experience supports company, role, ISO month dates, description, technologies, a
 
 ## Contact, profiles, and resume
 
-Set `site.email` and the two `socialProfiles[].url` values in `src/data/site.ts`. Until then, these controls say they are unavailable and do not open invented addresses. Setting an email automatically enables the `mailto:` action. Social profiles open in a new tab with safe `rel` attributes.
+`socialProfiles` in `src/data/site.ts` is the single source of truth for the official GitHub and LinkedIn URLs. The hero, footer, and contact section all use the shared `SocialLinks` component, with accessible owner labels and new-tab links using `rel="noopener noreferrer"`. Email remains unavailable until `site.email` is set, which automatically enables the `mailto:` action.
 
-Add your PDF at:
+The current resume is served from:
 
 ```text
-public/documents/ramses-sanchez-resume.pdf
+public/documents/Ramses_Sanchez_Resume.pdf
 ```
 
-Then set `site.resume.available` to `true`. The default Resume button points to the on-page status message instead of a missing PDF. A future contact form can be introduced inside the contact component without changing the rest of the page; submissions and a backend are deliberately not implemented.
+`site.resume.path` points to `/documents/Ramses_Sanchez_Resume.pdf`, and `site.resume.available` is `true`. The navbar and contact resume links open the PDF directly in a new tab using the browser's PDF viewer; they do not force a download or scroll to a page section. Replace the file at the same path to update the resume. A future contact form can be introduced inside the contact component without changing the rest of the page; submissions and a backend are deliberately not implemented.
 
 ## Hero media and editable overlays
 
@@ -105,10 +105,10 @@ The current hero plays `public/videos/hero_loop_1.mp4` as a muted, inline, conti
 - `HeroVideo` defers the MP4 source until the browser’s motion preference is known. Reduced motion uses the static image and skips the video download. Accessible pause/play and sound controls let visitors stop the background or enable audio. Playback starts muted; the sound button to the right of pause toggles audio without changing playback. The sound choice is preserved across pause/resume and tab changes. Returning to a visible tab resumes playback unless the visitor paused it. Event listeners and media resources are cleaned up on unmount.
 - `HeroOverlay` owns the exact name, title, sentence, opening/closing comments, code panel, scroll links, and metadata.
 - `HeroCodePanel` uses semantic `pre`/`code`, CSS syntax colors, and six decorative line numbers. There is no syntax-highlighting dependency.
-- `HeroMeta` reuses professional social icons and adds the New York location. Profile URLs remain explicit placeholders in `src/data/site.ts`.
+- `HeroMeta` reuses professional social icons and adds the New York location. Official profile URLs are centralized in `src/data/site.ts`.
 - `hero.module.css` controls composition, image position, typography, and responsive layout; the media never contains website interface text.
 
-The hero has at least viewport height. Short viewports may scroll naturally so content remains readable. Mobile uses a tighter background crop and a stacked metadata row. The background loops natively; no entrance, parallax, pinning, or scroll-story animation is added. The existing proof scene is no longer mounted on the homepage; the scroll indicator leads directly to projects.
+The hero has at least viewport height. Short viewports may scroll naturally so content remains readable. Mobile uses a tighter background crop and a stacked metadata row. The background loops natively and the hero copy types in together over 1.7 seconds. No parallax, pinning, or scroll-story animation is added. The existing proof scene is no longer mounted on the homepage; the scroll indicator leads directly to projects.
 
 `useAutoHideHeader` listens to scroll events passively and updates direction at most once per animation frame. The header stays visible near the top, hides on downward scrolling, and returns on even a small upward movement. Focus inside the header or an open mobile menu keeps it visible. Listeners and pending frames are cleaned up on unmount. CSS disables the slide transition for reduced motion.
 
@@ -117,6 +117,12 @@ See [hero implementation notes](docs/hero-implementation.md) for the exact file 
 Future photographs go in `public/images/portraits/`; replace the hero source in `hero-media.tsx` when ready. Store compressed videos in `public/videos/` and frame sequences in `public/sequences/<scene>/`. Keep original media masters outside `public/`; everything in that directory is publicly addressable. Future playback renderers should preserve the existing independent media/content layers and provide a static reduced-motion fallback.
 
 ## Animation architecture
+
+`TypingText` (`src/components/animations/typing-text.tsx`) wraps plain text in words that reserve their full width from the first render. `src/lib/animation/typing.ts` measures grapheme boundaries with DOM Ranges and changes only each word's clipping mask. Letters appear and disappear in order; text content, surrounding geometry, and React state stay stable. Completed words remove their clipping so shadows and italic overhang remain intact. The complete semantic text remains available to assistive technology throughout, without live-region announcements.
+
+One `TypingAnimations` controller is mounted inside `main`. Existing containers opt in with `data-typing-group="hero"` or `data-typing-group="scroll"`; nested groups own their own text. All ten hero phrases start together and finish in 1.7 seconds. Shared section headings and the main project, experience, about, technology, and contact copy use the same masks with ScrollTrigger. The reveal starts at `top 90%` and completes over 18% of the viewport height, capped at 160 pixels, with a 0.15-second scrub. Scrolling upward reverses the same timeline, so text deletes and can type again. Navbar, footer, buttons, social links, and the developer code panel are excluded.
+
+Reduced motion skips the typing timelines and immediately exposes all text. A `noscript` override also exposes everything without JavaScript. Resize/ScrollTrigger refresh remeasures glyph boundaries. Cleanup removes each controller's timelines, triggers, refresh listener, data markers, and manually written masks. No per-character React updates, timers, or additional dependencies are used.
 
 `src/lib/animation/gsap.ts` explicitly registers both ScrollTrigger and `useGSAP`, keeping plugin registration present in the production bundle. `useScrollScene` wraps the [official GSAP React lifecycle](https://gsap.com/resources/React/) and [GSAP matchMedia](<https://gsap.com/docs/v3/GSAP/gsap.matchMedia()/>):
 
@@ -144,6 +150,6 @@ The reusable proof scene (currently not mounted) transitions `build({ for: "peop
 
 ## Validation and next steps
 
-Run `npm run check` and `npm run build` before shipping. For manual QA, check narrow mobile and desktop widths, keyboard navigation, the resume() status jump, and the navbar hiding downward/reappearing upward. Toggle the OS reduced-motion preference and confirm the slide transition is disabled while content remains visible.
+Run `npm run check` and `npm run build` before shipping. For manual QA, check narrow mobile and desktop widths, keyboard navigation, social links and resume() opening in new tabs, and the navbar hiding downward/reappearing upward. Confirm that the resume PDF loads without scrolling the portfolio. Check the hero types in under two seconds, section copy types/deletes/types on down/up/down scrolling, and wrapping stays stable. Toggle the OS reduced-motion preference and confirm all text appears immediately and the navbar slide transition is disabled.
 
 This is a local foundation for later deployment to **RamsesCode.dev**. No hosting account, domain, or public deployment has been configured. The next design pass can settle photography, storyboard, palette, and typography without restructuring the content or animation layers.

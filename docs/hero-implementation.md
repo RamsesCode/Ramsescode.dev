@@ -20,7 +20,7 @@ The current hero follows the provided coding-workspace reference. The original i
 - `src/components/hero/hero-media.tsx` — optimized photographic plate and independent gradients.
 - `src/components/navigation/site-header.tsx` — exact wordmark, labels, and visibility hook.
 - `src/components/navigation/mobile-navigation.tsx` — shared menu state and the same five labels.
-- `src/components/navigation/resume-link.tsx` — lowercase resume() treatment; existing PDF placeholder behavior.
+- `src/components/navigation/resume-link.tsx` — lowercase resume() treatment; opens the configured PDF in a new tab.
 - `src/app/page.tsx` — unmount the earlier GSAP proof scene; retain its source for future use.
 - `src/styles/globals.css` — remove retired hero/navigation rules now owned by CSS modules.
 - `src/styles/tokens.css` — improve the system monospace fallback stack for code and navigation.
@@ -61,3 +61,45 @@ The media layer now uses the supplied `public/videos/hero_loop_1.mp4` without mo
 Motion preference is read before attaching the MP4 source, so visitors using reduced motion do not download or autoplay the video. The video reveals only after playback begins. Manual pause keeps the current frame and is respected when returning to the tab. Browser autoplay denial keeps the image and a Play button. Native looping reuses the same loaded video; no timed source reload or artificial stop is inserted between loops.
 
 The visual continuity at the cut depends on the supplied clip’s first and last frames; this implementation replays the actual file without re-editing its content.
+
+## Introduction and profile-link refinement
+
+The desktop introduction now sits in the open space toward the right of the video, with `SOFTWARE ENGINEER` as its visible title. The developer code panel, opening comments, scroll indicator, and closing comments retain their left-side composition; mobile uses a readable stacked introduction. The video, playback controls, and navigation behavior remain unchanged.
+
+`socialProfiles` in `src/data/site.ts` centrally supplies the official GitHub and LinkedIn URLs to the hero, footer, and contact section. All profile links open in new tabs with secure `rel` attributes and accessible owner labels. Navbar and contact resume links open `/documents/Ramses_Sanchez_Resume.pdf` in a new tab without a download attribute. The old resume fragment link and its scroll-target ID have been removed.
+
+## Shared typing animation
+
+The ten requested hero phrases use server-rendered `TypingText` and one scoped `TypingAnimations` controller. They reveal at whole-grapheme boundaries concurrently over 1.7 seconds. Word masks preserve final wrapping and keep the existing hero composition stationary, including the rotated comments and the scaled right-side introduction. The code panel, media controls, location, social icons, and navbar remain immediately visible.
+
+Below the hero, shared section headings and introductory copy use the same helper through short, reversible ScrollTrigger timelines. The footer is excluded. Reduced motion and no-JavaScript views show complete text immediately. See the README's animation architecture section for the opt-in attributes and cleanup behavior.
+
+## Files changed for the refinements and typing system
+
+Created:
+
+- `src/components/animations/typing-text.tsx`
+- `src/components/animations/typing-animations.tsx`
+- `src/lib/animation/typing.ts`
+- `src/styles/typing.css`
+- `public/documents/Ramses_Sanchez_Resume.pdf` (a copy of the supplied `Ramses_Sanchez_Resume1.pdf`)
+
+Modified:
+
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/components/hero/hero-overlay.tsx`
+- `src/components/hero/hero.module.css`
+- `src/components/hero/scroll-indicator.tsx`
+- `src/components/ui/typography/section-heading.tsx`
+- `src/components/projects/project-card.tsx`
+- `src/components/experience/experience-section.tsx`
+- `src/components/about/about-section.tsx`
+- `src/components/skills/technologies-section.tsx`
+- `src/components/contact/contact-section.tsx`
+- `src/components/navigation/resume-link.tsx`
+- `src/components/social/social-links.tsx`
+- `src/data/site.ts`
+- `src/styles/globals.css`
+- `README.md`
+- `docs/hero-implementation.md`

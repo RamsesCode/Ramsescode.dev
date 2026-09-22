@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { TypingText } from "@/components/animations/typing-text";
 import { Github } from "@/components/social/brand-icons";
 import type { Project } from "@/types/portfolio";
 import { ProjectVisual } from "./project-visual";
@@ -7,13 +8,17 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
   return (
     <article className="project-card" aria-labelledby={`${project.id}-title`}>
       <ProjectVisual project={project} />
-      <div className="project-card-content">
+      <div className="project-card-content" data-typing-group="scroll">
         <p className="project-category">
           <span>{String(index + 1).padStart(2, "0")}</span>
-          {project.category}
+          <TypingText>{project.category}</TypingText>
         </p>
-        <h3 id={`${project.id}-title`}>{project.title}</h3>
-        <p className="project-description">{project.description}</p>
+        <h3 id={`${project.id}-title`}>
+          <TypingText>{project.title}</TypingText>
+        </h3>
+        <p className="project-description">
+          <TypingText>{project.description}</TypingText>
+        </p>
         {project.technologies.length > 0 && (
           <ul className="tag-list" aria-label="Technologies">
             {project.technologies.map((technology) => (

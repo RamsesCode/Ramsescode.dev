@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { Github, Linkedin } from "./brand-icons";
-import { socialProfiles } from "@/data/site";
+import { site, socialProfiles } from "@/data/site";
 
 export function SocialLinks({ iconOnly = false }: { iconOnly?: boolean }) {
   return (
@@ -24,7 +24,7 @@ export function SocialLinks({ iconOnly = false }: { iconOnly?: boolean }) {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${label} (opens in a new tab)`}
+                aria-label={`${site.name} on ${label} (opens in a new tab)`}
               >
                 {contents}
               </a>

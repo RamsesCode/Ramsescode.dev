@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { TypingText } from "@/components/animations/typing-text";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/typography/section-heading";
 import { experience } from "@/data/experience";
@@ -34,10 +35,16 @@ export function ExperienceSection() {
                   ? `${formatMonth(item.startDate)} — ${item.endDate ? formatMonth(item.endDate) : "Present"}`
                   : "DETAILS FORTHCOMING"}
               </div>
-              <div>
-                <h3>{item.role}</h3>
-                <p className="experience-company">{item.company}</p>
-                <p className="experience-description">{item.description}</p>
+              <div data-typing-group="scroll">
+                <h3>
+                  <TypingText>{item.role}</TypingText>
+                </h3>
+                <p className="experience-company">
+                  <TypingText>{item.company}</TypingText>
+                </p>
+                <p className="experience-description">
+                  <TypingText>{item.description}</TypingText>
+                </p>
                 {item.highlights.length > 0 && (
                   <ul className="experience-highlights">
                     {item.highlights.map((highlight) => (

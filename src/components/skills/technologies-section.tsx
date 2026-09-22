@@ -1,3 +1,4 @@
+import { TypingText } from "@/components/animations/typing-text";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/ui/typography/section-heading";
 import { technologies } from "@/data/technologies";
@@ -23,9 +24,13 @@ export function TechnologiesSection() {
               <span className="technology-symbol" aria-hidden="true">
                 {technology.symbol}
               </span>
-              <div>
-                <h3>{technology.name}</h3>
-                <p>{technology.detail}</p>
+              <div data-typing-group="scroll">
+                <h3>
+                  <TypingText>{technology.name}</TypingText>
+                </h3>
+                <p>
+                  <TypingText>{technology.detail}</TypingText>
+                </p>
               </div>
             </li>
           ))}

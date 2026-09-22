@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { site } from "@/data/site";
 import "@/styles/globals.css";
+import "@/styles/typing.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -35,6 +36,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="en">
       <body>
+        <noscript>
+          <style>{".typing-word { clip-path: none !important; }"}</style>
+        </noscript>
         <a href="#main" className="skip-link">
           Skip to content
         </a>

@@ -1,4 +1,5 @@
 import { ArrowUpRight, Mail } from "lucide-react";
+import { TypingText } from "@/components/animations/typing-text";
 import { Container } from "@/components/layout/container";
 import { SocialLinks } from "@/components/social/social-links";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -14,18 +15,24 @@ export function ContactSection() {
     >
       <Container>
         <div className="contact-panel">
-          <div className="contact-content">
+          <div className="contact-content" data-typing-group="scroll">
             <p className="eyebrow">
-              <span className="section-number">06</span> Start a conversation
+              <span className="section-number">06</span>{" "}
+              <TypingText>Start a conversation</TypingText>
             </p>
             <h2 id="contact-heading">
-              Good things start
+              <TypingText>Good things start</TypingText>
               <br />
-              with a <span>hello.</span>
+              <TypingText>with a</TypingText>{" "}
+              <span className="contact-heading-accent">
+                <TypingText>hello.</TypingText>
+              </span>
             </h2>
-            <p>
-              Have a software engineering opportunity or something worth building? I’d
-              love to hear about it.
+            <p data-typing-group="scroll">
+              <TypingText>
+                Have a software engineering opportunity or something worth building? I’d
+                love to hear about it.
+              </TypingText>
             </p>
             <div className="contact-actions">
               {site.email ? (
@@ -47,9 +54,7 @@ export function ContactSection() {
               <SocialLinks />
             </div>
             {!site.email && (
-              <p className="contact-status">
-                Contact details and professional profiles will be added soon.
-              </p>
+              <p className="contact-status">Email contact details will be added soon.</p>
             )}
           </div>
           <div className="contact-mark" aria-hidden="true">
@@ -57,10 +62,12 @@ export function ContactSection() {
             <span className="contact-mark-dot">.</span>
           </div>
         </div>
-        <p id="resume-status" className="resume-status" tabIndex={-1}>
+        <p className="resume-status">
           {site.resume.available ? (
-            <a href={site.resume.path}>
-              View Ramses’s resume (PDF) <ArrowUpRight size={13} aria-hidden="true" />
+            <a href={site.resume.path} target="_blank" rel="noopener noreferrer">
+              View Ramses’s resume (PDF)
+              <span className="visually-hidden"> (opens in a new tab)</span>{" "}
+              <ArrowUpRight size={13} aria-hidden="true" />
             </a>
           ) : (
             "Resume coming soon. A downloadable PDF will be available here."

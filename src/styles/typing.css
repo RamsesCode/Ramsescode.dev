@@ -1,0 +1,17 @@
+/* Whole words keep their final width; only the visible glyph boundary changes. */
+.typing-word {
+  display: inline-block;
+  white-space: pre;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .typing-word {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing-word {
+    clip-path: none !important;
+  }
+}
